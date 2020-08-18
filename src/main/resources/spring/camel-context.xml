@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd     http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    
+    <bean class="org.mycompany.routes.CxfRouteBuilder" id="cxfRouteBuilder"/>
+    <bean class="org.mycompany.service.PossiblyCompressedInboundInterceptor"
+        id="interceptor" scope="singleton"/>
+    
+    <cxf:cxfEndpoint address="http://www.dneonline.com/calculator.asmx"
+        endpointName="CalculatorSoap" id="cxfSoapServiceEndpoint"
+        loggingFeatureEnabled="true"
+        serviceClass="org.tempuri.CalculatorSoap"
+        serviceName="s:Calculator" wsdlURL="wsdl/sample.wsdl" xmlns:s="http://tempuri.org/">
+        <cxf:inInterceptors>
+            <ref bean="interceptor"/>
+        </cxf:inInterceptors>
+    </cxf:cxfEndpoint>
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring" />
+</beans>
